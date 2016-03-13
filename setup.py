@@ -1,124 +1,107 @@
+# Always prefer setuptools over distutils
 from setuptools import setup, find_packages
+# To use a consistent encoding
+from codecs import open
+from os import path
 
-version = '1.0.5'
+here = path.abspath(path.dirname(__file__))
 
-LONG_DESCRIPTION = """
-How to use django-pagination
-----------------------------
-
-``django-pagination`` allows for easy Digg-style pagination without modifying
-your views.
-
-There are really 5 steps to setting it up with your projects (not including 
-installation, which is covered in INSTALL.txt in this same directory.)
-
-1. List this application in the ``INSTALLED_APPS`` portion of your settings
-   file.  Your settings file might look something like::
-   
-       INSTALLED_APPS = (
-           # ...
-           'pagination',
-       )
-
-
-2. Install the pagination middleware.  Your settings file might look something
-   like::
-   
-       MIDDLEWARE_CLASSES = (
-           # ...
-           'pagination.middleware.PaginationMiddleware',
-       )
-
-3. If it's not already added in your setup, add the request context processor.
-   Note that context processors are set by default implicitly, so to set them
-   explicitly, you need to copy and paste this code into your under
-   the value TEMPLATE_CONTEXT_PROCESSORS::
-   
-        ("django.core.context_processors.auth",
-        "django.core.context_processors.debug",
-        "django.core.context_processors.i18n",
-        "django.core.context_processors.media",
-        "django.core.context_processors.request")
-
-4. Add this line at the top of your template to load the pagination tags:
-
-       {% load pagination_tags %}
-
-
-5. Decide on a variable that you would like to paginate, and use the
-   autopaginate tag on that variable before iterating over it.  This could 
-   take one of two forms (using the canonical ``object_list`` as an example
-   variable):
-   
-       {% autopaginate object_list %}
-       
-   This assumes that you would like to have the default 20 results per page.
-   If you would like to specify your own amount of results per page, you can
-   specify that like so:
-   
-       {% autopaginate object_list 10 %}
-   
-   Note that this replaces ``object_list`` with the list for the current page, so
-   you can iterate over the ``object_list`` like you normally would.
-   
-
-6. Now you want to display the current page and the available pages, so
-   somewhere after having used autopaginate, use the paginate inclusion tag:
-   
-       {% paginate %}
-   
-   This does not take any arguments, but does assume that you have already
-   called autopaginate, so make sure to do so first.
-
-
-That's it!  You have now paginated ``object_list`` and given users of the site
-a way to navigate between the different pages--all without touching your views.
-
-
-Optional Settings
-------------------
-
-In django-pagination, there are no required settings.  There are, however, a
-small set of optional settings useful for changing the default behavior of the
-pagination tags.  Here's an overview:
-
-``PAGINATION_DEFAULT_PAGINATION``
-    The default amount of items to show on a page if no number is specified.
-
-``PAGINATION_DEFAULT_WINDOW``
-    The number of items to the left and to the right of the current page to
-    display (accounting for ellipses).
-
-``PAGINATION_DEFAULT_ORPHANS``
-    The number of orphans allowed.  According to the Django documentation,
-    orphans are defined as::
-    
-        The minimum number of items allowed on the last page, defaults to zero.
-
-``PAGINATION_INVALID_PAGE_RAISES_404``
-    Determines whether an invalid page raises an ``Http404`` or just sets the
-    ``invalid_page`` context variable.  ``True`` does the former and ``False``
-    does the latter.
-"""
+# Get the long description from the README file
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
-    name='django-pagination',
-    version=version,
-    description="django-pagination",
-    long_description=LONG_DESCRIPTION,
-    classifiers=[
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-        "Framework :: Django",
-        "Environment :: Web Environment",
-    ],
-    keywords='pagination,django',
+    name='django-pagination-fork',
+
+    # Versions should comply with PEP440.  For a discussion on single-sourcing
+    # the version across setup.py and the project code, see
+    # https://packaging.python.org/en/latest/single_source_version.html
+    version='1.0.15',
+
+    description='A fork of django-pagination',
+    long_description=long_description,
+
+    # The project's main homepage.
+    url='https://github.com/pypa/sampleproject',
+
+    # Author details
     author='Eric Florenzano',
     author_email='floguy@gmail.com',
-    url='http://django-pagination.googlecode.com/',
-    license='BSD',
-    packages=find_packages(),
-    include_package_data=True,
-    zip_safe=False,
-    install_requires=['setuptools'],
+
+    # Choose your license
+    license='MIT',
+
+    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    classifiers=[
+        # How mature is this project? Common values are
+        #   3 - Alpha
+        #   4 - Beta
+        #   5 - Production/Stable
+        'Development Status :: 3 - Alpha',
+
+        # Indicate who your project is intended for
+        'Intended Audience :: Developers',
+        'Topic :: Software Development :: Build Tools',
+
+        # Pick your license as you wish (should match "license" above)
+        'License :: OSI Approved :: MIT License',
+
+        # Specify the Python versions you support here. In particular, ensure
+        # that you indicate whether you support Python 2, Python 3 or both.
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+    ],
+
+    # What does your project relate to?
+    keywords='pagination django',
+
+    # You can just specify the packages manually here if your project is
+    # simple. Or you can use find_packages().
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+
+    # Alternatively, if you want to distribute just a my_module.py, uncomment
+    # this:
+    #   py_modules=["my_module"],
+
+    # List run-time dependencies here.  These will be installed by pip when
+    # your project is installed. For an analysis of "install_requires" vs pip's
+    # requirements files see:
+    # https://packaging.python.org/en/latest/requirements.html
+    install_requires=[],
+
+    # List additional groups of dependencies here (e.g. development
+    # dependencies). You can install these using the following syntax,
+    # for example:
+    # $ pip install -e .[dev,test]
+    extras_require={
+        'dev': ['check-manifest'],
+        'test': ['coverage'],
+    },
+
+    # If there are data files included in your packages that need to be
+    # installed, specify them here.  If using Python 2.6 or less, then these
+    # have to be included in MANIFEST.in as well.
+    package_data={
+        'pagination': ['templates/pagination/pagination.html'],
+    },
+
+    # Although 'package_data' is the preferred approach, in some case you may
+    # need to place data files outside of your packages. See:
+    # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
+    # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
+    #data_files=[('templates/pagination', ['pagination/templates/pagination/pagination.html'])],
+
+    # To provide executable scripts, use entry points in preference to the
+    # "scripts" keyword. Entry points provide cross-platform support and allow
+    # pip to create the appropriate form of executable for the target platform.
+    #entry_points={
+    #    'console_scripts': [
+    #        'sample=sample:main',
+    #    ],
+    #},
 )
